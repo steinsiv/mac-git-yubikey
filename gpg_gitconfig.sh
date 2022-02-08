@@ -2,8 +2,8 @@
 
 # Simplified version customized for mac. Originally from: https://github.com/DataDog/yubikey
 
-### PREREQUISITES BEFORE ADDING KEY TO GIT
-# 1. brew install expect gpg pinentry-mac ykman
+### PREREQUISITES BEFORE ADDING KEY TO GIT (use brew version of gpg and git)
+# 1. brew install git gpg expect gpg pinentry-mac ykman
 # 2. The yubikey must already be configured for opengpg, see `gpg_yubikey.sh`
 
 # sign all commits, global config
