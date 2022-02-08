@@ -1,12 +1,9 @@
-# yubikey howto
-setup git verified commits with yubikey on a mac
+# WIP yubikey howto
+Setup git verified commits with yubikey on a mac
 
 **brew installs**
 ```
-expect
-gpg
-pinentry-mac
-ykman
+brew install git expect gpg pinentry-mac ykman
 ```
 
 ## Add pinentry program to config
