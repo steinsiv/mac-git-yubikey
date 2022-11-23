@@ -37,16 +37,3 @@ echo
 echo "To export your GPG public key for use in GitHub, run the following command, and insert key on github.com"
 echo "gpg --armor --export $KEYID"
 echo
-
-(echo "$NOTIFICATION_SCRIPT_PATH" | cut -d '/' -f-5)
-echo -e "$NOTIFICATION_CMD" > "$NOTIFICATION_SCRIPT_PATH"
-chmod u+x "$NOTIFICATION_SCRIPT_PATH"
-git config --global --add gpg.program "$NOTIFICATION_SCRIPT_PATH"
-echo "Global sign notification have been set up in git with $NOTIFICATION_SCRIPT_PATH"
-echo
-
-# EXPORT GPG public key to GITHUB.
-echo "To export your GPG public key for use in GitHub, run the following command, and insert key on github.com"
-echo "gpg --armor --export $KEYID"
-echo
-
