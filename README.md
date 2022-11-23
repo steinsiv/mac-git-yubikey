@@ -1,5 +1,5 @@
-# WIP yubikey howto 👩🏽‍💻
-Setup git verified commits with yubikey on a mac
+# yubikey onamac
+Setup git verified commits with yubikey on a mac 👩🏽‍💻
 
 **brew installs**
 ```
@@ -88,7 +88,9 @@ ykman openpgp keys set-touch sig on
 gpg --list-keys
 gpg --armor --export <KEYID>
 ```
-
+<a href="https://github.com/settings/gpg/new" target=_top>
+<img width="899" alt="image" src="https://user-images.githubusercontent.com/1442452/203655816-6d17eece-6198-402d-9f01-0e710456533b.png">
+</a>
 # 2. git config
 example configuration
 ```sh
