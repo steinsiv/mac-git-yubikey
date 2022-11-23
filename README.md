@@ -88,9 +88,11 @@ ykman openpgp keys set-touch sig on
 gpg --list-keys
 gpg --armor --export <KEYID>
 ```
+
 <a href="https://github.com/settings/gpg/new" target=_top>
 <img width="899" alt="image" src="https://user-images.githubusercontent.com/1442452/203655816-6d17eece-6198-402d-9f01-0e710456533b.png">
 </a>
+
 # 2. git config
 example configuration
 ```sh
@@ -188,6 +190,12 @@ LHGhbroV9utkN0S5MOvAfpVXdw==
 ```
 fetch public key from https://github.com/steinsiv.gpg and verify
 
-## script to add signing requirements to git config
+## Commit, Sign and Push a verified commit
 
-see `gpg_gitconfig.sh`
+<img width="1199" alt="image" src="https://user-images.githubusercontent.com/1442452/203656370-5d1200f9-33e7-4d62-92f5-459ab3b1173b.png">
+
+
+
+## extras: script to automatically add signing requirements to git config
+
+see: `gpg_gitconfig.sh`
