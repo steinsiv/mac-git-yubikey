@@ -1,4 +1,4 @@
-# WIP yubikey howto
+# WIP yubikey howto 👩🏽‍💻
 Setup git verified commits with yubikey on a mac
 
 **brew installs**
@@ -6,7 +6,7 @@ Setup git verified commits with yubikey on a mac
 brew install git gpg pinentry-mac ykman
 ```
 
-## Add pinentry program to config and restart agent
+## Add pinentry program to gpg-agent config and restart agent
 ```
 echo "pinentry-program $(which pinentry-mac)" >> $HOME/.gnupg/gpg-agent.conf
 gpg-connect-agent reloadagent /bye
@@ -14,7 +14,7 @@ gpg-connect-agent reloadagent /bye
 
 # 1. setup Yubikey
 
-## example yubikey config
+example yubikey config
 ```sh
 ❯ gpg --card-status
 Reader ...........: Yubico YubiKey FIDO CCID
@@ -47,17 +47,18 @@ ssb>  rsa4096/49567ACA7141ABBB  created: 2021-05-27  expires: 2031-05-25
                                 card-no: 0006 15791967
 ```
 
-## setup
-Before setup find yourself a `user-pin` and `admin-pin` and associate it with your yubikey serial number
+
+Before setup prepare yourself a `user-pin` (6) and `admin-pin` (8) and associate it with your yubikey serial number.
+## 1.1 remove otp
 ```sh
 ykman config usb -d otp
 ```
 
 
-## reset openpgp factory settings
+## 1.2 reset openpgp factory settings
 ykman openpgp reset
 
-## create keys
+## 1.3 create keys
 ```sh
 gpg --card-edit
 ```
@@ -72,26 +73,24 @@ commands in edit mode
         Authentication-Key - 4096 
     4. name
     5. url https://github.com/steinsiv.gpg
-    generate
+    6. generate
         Stein A Sivertsen
         steinsiv@users.noreply.github.com
+    7. quit
 ```
-### Set the touch policy to touch required for sign
+### 1.4 set the touch policy to touch required for sign
 ```sh
 ykman openpgp keys set-touch sig on
 ```
 
-### Set the touch policy to touch required for encryption
-```sh
-ykman openpgp keys set-touch enc on
-```
-### Export to github
+### 1.5 Export public key in armored mode and export to github (settings/PGP)
 ```sh
 gpg --list-keys
 gpg --armor --export <KEYID>
 ```
 
-# 2. example git config
+# 2. git config
+example configuration
 ```sh
 ❯ git config --global --list
 user.email=steinsiv@users.noreply.github.com
@@ -102,9 +101,18 @@ tag.forcesignannotated=true
 gpg.program=$HOME/.local/bin/yubikeysign
 ```
 
-__**note** user.email and email on key must match!__
+__**note** user.email and email on key must match for github to verify!__
 
-## create gpgsign program 
+## 2.1 clear git settings
+```sh
+git config --global --unset user.signingkey
+git config --global --unset commit.gpgsign 
+git config --global --unset tag.forceSignAnnotated
+git config --global --unset gpg.program
+```
+
+
+## 2.2 create gpgsign program 
 ```sh
 $HOME/.local/bin/yubikeysign
 ```
@@ -120,7 +128,7 @@ echo "Sign completed"
 
 ```
 
-## configure git
+## 2.3 configure git
 
 ```sh
 git config --global user.signingkey 09442A8B08CB61E8C3754EA2AA288CD2B6F83618
@@ -129,7 +137,7 @@ git config --global tag.forceSignAnnotated true
 git config --global gpg.program "$HOME/.local/bin/yubikeysign"
 ```
 
-## Add a reminder for signing
+## 2.4 add a reminder to sign
 replace 
 ```sh
 /usr/local/bin/gpg "$@"
@@ -151,7 +159,7 @@ fi
 echo "Sign completed"
 ```
 
-## Check usage
+## Check gpg sign
 ```sh
 ❯ echo "I know it's hard to believe so I will sign this" > msg.txt
 ❯ gpg -s -a msg.txt
