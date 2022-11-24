@@ -57,7 +57,9 @@ ykman config usb -d otp
 ```
 
 ## 1.2 reset openpgp factory settings
+```sh
 ykman openpgp reset
+```
 
 ## 1.3 create keys
 ```sh
