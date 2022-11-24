@@ -83,12 +83,19 @@ commands in edit mode
         -> steinsiv@users.noreply.github.com
     7. quit
 ```
-### 1.4 set the touch policy to touch required for sign
+
+### 1.4 store revocation cert in your favourite password manager and delete it from disk
+```sh
+gpg: revocation certificate stored as '$HOME/.gnupg/openpgp-revocs.d/0DAE07577DC2E3B16C6185457B037DC8C6EDACE1.rev'
+public and secret key created and signed.
+```
+
+### 1.5 set the touch policy to touch required for sign
 ```sh
 ykman openpgp keys set-touch sig on
 ```
 
-### 1.5 Export public key in armored mode and import to github under `settings/pgp`
+### 1.6 Export public key in armored mode and import to github under `settings/pgp`
 ```sh
 gpg --list-keys
 gpg --armor --export <KEYID>
@@ -196,9 +203,7 @@ fetch public key from https://github.com/steinsiv.gpg and verify
 
 ## Commit, Sign and Push a verified commit
 
-<img width="1199" alt="image" src="https://user-images.githubusercontent.com/1442452/203656370-5d1200f9-33e7-4d62-92f5-459ab3b1173b.png">
-
-
+<img width="1190" alt="image" src="https://user-images.githubusercontent.com/1442452/203724765-c44e051e-d2bc-44ee-8aa1-277230afc3ff.png">
 
 ## extras: automate with script
 
