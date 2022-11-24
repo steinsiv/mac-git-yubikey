@@ -1,6 +1,8 @@
 # yubikey onamac
 Setup git verified commits with yubikey on a mac 👩🏽‍💻
 
+<img width="1199" alt="image" src="https://user-images.githubusercontent.com/1442452/203656370-5d1200f9-33e7-4d62-92f5-459ab3b1173b.png">
+
 **brew installs**
 ```
 brew install git gpg pinentry-mac ykman
@@ -48,12 +50,11 @@ ssb>  rsa4096/49567ACA7141ABBB  created: 2021-05-27  expires: 2031-05-25
 ```
 
 
-Before setup prepare yourself a `user-pin` (6) and `admin-pin` (8) and associate it with your yubikey serial number.
+Before setup prepare yourself a `user-pin` (6 digits) and `admin-pin` (8 digits), associate it with your yubikey serial number and store in your password manager.
 ## 1.1 remove otp
 ```sh
 ykman config usb -d otp
 ```
-
 
 ## 1.2 reset openpgp factory settings
 ykman openpgp reset
@@ -68,14 +69,16 @@ commands in edit mode
     1. admin
     2. passwd
     3. key-attr 
-        Signature-Key - RSA 4096
-        Encryption-Key - 4096
-        Authentication-Key - 4096 
-    4. name
-    5. url https://github.com/steinsiv.gpg
+        -> Signature-Key - RSA 4096
+        -> Encryption-Key - RSA 4096
+        -> Authentication-Key - RSA 4096 
+    4. name 
+        -> Stein A Sivertsen
+    5. url 
+        -> https://github.com/steinsiv.gpg
     6. generate
-        Stein A Sivertsen
-        steinsiv@users.noreply.github.com
+        -> Stein A Sivertsen
+        -> steinsiv@users.noreply.github.com
     7. quit
 ```
 ### 1.4 set the touch policy to touch required for sign
@@ -83,13 +86,13 @@ commands in edit mode
 ykman openpgp keys set-touch sig on
 ```
 
-### 1.5 Export public key in armored mode and export to github (settings/PGP)
+### 1.5 Export public key in armored mode and import to github under `settings/pgp`
 ```sh
 gpg --list-keys
 gpg --armor --export <KEYID>
 ```
 
-<a href="https://github.com/settings/gpg/new" target=_top>
+[github.com/settings/gpg/new](https://github.com/settings/gpg/new)
 <img width="899" alt="image" src="https://user-images.githubusercontent.com/1442452/203655816-6d17eece-6198-402d-9f01-0e710456533b.png">
 </a>
 
@@ -105,7 +108,7 @@ tag.forcesignannotated=true
 gpg.program=$HOME/.local/bin/yubikeysign
 ```
 
-__**note** user.email and email on key must match for github to verify!__
+__**note** user.email and email on key must match for github to verify your commits!__
 
 ## 2.1 clear git settings
 ```sh
@@ -114,7 +117,6 @@ git config --global --unset commit.gpgsign
 git config --global --unset tag.forceSignAnnotated
 git config --global --unset gpg.program
 ```
-
 
 ## 2.2 create gpgsign program 
 ```sh
@@ -141,7 +143,7 @@ git config --global tag.forceSignAnnotated true
 git config --global gpg.program "$HOME/.local/bin/yubikeysign"
 ```
 
-## 2.4 add a reminder to sign
+## 2.4 add a notification (optional)
 replace 
 ```sh
 /usr/local/bin/gpg "$@"
@@ -196,6 +198,6 @@ fetch public key from https://github.com/steinsiv.gpg and verify
 
 
 
-## extras: script to automatically add signing requirements to git config
+## extras: automate with script
 
 see: `gpg_gitconfig.sh`
