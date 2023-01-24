@@ -151,28 +151,28 @@ git config --global gpg.program "$HOME/.local/bin/yubikeysign"
 
 ## check gpg sign, (optional)
 ```sh
-❯ echo "Im" > msg.txt
-❯ gpg -s -a msg.txt
+❯ echo "Important" | gpg --clearsign       
+gpg: using "158ACB5D9E77DB68FC26A8413344432E7CFA8C38" as default secret key for signing
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-❯ cat msg.txt.asc
------BEGIN PGP MESSAGE-----
+Important
+-----BEGIN PGP SIGNATURE-----
 
-owEBfAKD/ZANAwAIATNEQy58+ow4Aaw1Ygdtc2cudHh0Y35/lGl0cyBoYXJkIHRv
-IGJlbGlldmUgc28gaSB3aWxsIHNpZ24gdGhpcwqJAjMEAAEIAB0WIQQVistdnnfb
-aPwmqEEzREMufPqMOAUCY35/lAAKCRAzREMufPqMOL30D/44H0e4ZrSyBx+yPpK4
-u+q63Law4lzT2/0HpsipkbIdbw3ndPlYvhM3nq5sCh2gTS+JbBPgflafKzOBaSk5
-ICbCeI471B+sSQHNd5nUHb41yqrn0l8AEZlojHB4PEqn1UliQZn2MHpXgtxNfAnT
-SHE2wUZIbMGxeB6qEaSNYjolLafq6pYwkM8vXo6vK+Vf2prbI+mxX5m+lTsp3sUd
-KUxu3xiyDqMjwVJeYxQGF4Ri5FcRDdC9mLtcqnp2Evk5JqZQFx6FPStNX1ICqivZ
-6bj8nAE/yiGUf4XamWKwUpJZs+J7i7sJDkRipjvHboMB67FV6pco/vq5FgeF1lR/
-l7dSlAWUQGiuSgv8QWOAFxbE+Y5iJCFFWA78/UpfhpSf/m7ZUGVyy98PpfKuHCjm
-M17JBCFNyNrsoTvOF8+81NrenK9dLgAzI3pPhtwaGz2tD7txUwO0LUDBVPppwl81
-6/YgsPDy6QpvyaRRPzZfKRLtJxD1Owm10jaIsk1cV8CEj6SmNP6zncsB2ndnUUkb
-uepKSs0mCIJiQu7A/I1TNJFTVyLf/oTCJhiU8Di6tm/0E/6V5+bqIJwFmfugpVbu
-yTOIKSVuOX/Db/DHayfzNuC4Ok9AZGXUGSUJQQ9BPQvpwHwN2JBY+6awDGCACxIO
-LHGhbroV9utkN0S5MOvAfpVXdw==
-=w7C8
------END PGP MESSAGE-----
+iQIzBAEBCAAdFiEEFYrLXZ5322j8JqhBM0RDLnz6jDgFAmPPiAYACgkQM0RDLnz6
+jDhedg//S37hIukn+X684mJcZlBSTNU5LGT3kOSxV/PpBwEah7BPO48emeMT3t6C
+9dLPybZnTDWWGMWfAfWOYz9yi+F6U2eCYZMfMZRKG2O95e4FprnEw4nDUonOVvnb
+WJpKKfo/KuPhPggp27LwUuiI05nVDlh+7TY8gYY+x3pKRQlkrBuNJrzJctC4Wryu
+CSZ/HuOqf7NjkL4uXq1u+1/pH8yr1oE6o5fkRNLU8fHxYvRPNK8DkQGz+DGPme/P
+8uhtbon5CC9FkRqJ/F8sTx3HbnxzF3iZLEqOKHvt3SPRUsSKIwGrx6ezbESdWNJa
+m+rwiLtmc8KKel1cBSBFr/ZXUueqRHWTabM4iTfzZZ0epeTuZ4UqVKg8c99KoMo+
+5HuiMTmFtqZQw3apu6VF3yPG1bWgrrqDfKdzrcESnBNeDrrcaAAmViVRRuS0a8Ps
+fVaNzAlub1ftm5whpCJpqId0kNpU8+qIisj6NsfBmUGmUDMl8QrqIeGQAYbMMi/y
+ITfa3Mcnq9YBH88SAPL4qX0wcigUSW48yQwvamWBMCyuDQ8/f1DS2OlzzT3w/ZXg
+TBVUloSANG/Cnc0yvk3WhDBO+FtGHNy6cHAJWAfcRJYimkmVH87aYPPKMX0DTYfM
+LDDDfK7r7Y2ev5gIWr5rB126pvbsIst4XdYq+lQblHiy+WKBL14=
+=GIWQ
+-----END PGP SIGNATURE-----
 ```
 fetch public key from https://github.com/steinsiv.gpg and verify
 
