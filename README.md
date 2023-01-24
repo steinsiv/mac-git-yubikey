@@ -1,4 +1,5 @@
 # yubikey onamac
+
 Setup git verified commits with yubikey on a mac 👩🏽‍💻
 
 <img width="1199" alt="image" src="https://user-images.githubusercontent.com/1442452/203656370-5d1200f9-33e7-4d62-92f5-459ab3b1173b.png">
@@ -14,7 +15,21 @@ echo "pinentry-program $(which pinentry-mac)" >> $HOME/.gnupg/gpg-agent.conf
 gpg-connect-agent reloadagent /bye
 ```
 
-# 1. setup Yubikey
+# YKMAN
+[https://docs.yubico.com/software/yubikey/tools/ykman/](https://docs.yubico.com/software/yubikey/tools/ykman/)
+
+Remove otp and reset openpg
+Also set the touch policy
+
+[https://docs.yubico.com/yesdk/users-manual/application-piv/pin-touch-policies.html](https://docs.yubico.com/yesdk/users-manual/application-piv/pin-touch-policies.html)
+
+```sh
+ykman config usb -d otp
+ykman openpgp reset
+ykman openpgp keys set-touch sig on
+```
+
+# GPG
 
 example yubikey config
 ```sh
@@ -50,18 +65,9 @@ ssb>  rsa4096/49567ACA7141ABBB  created: 2021-05-27  expires: 2031-05-25
 ```
 
 
-Before setup prepare yourself a `user-pin` (6 digits) and `admin-pin` (8 digits), associate it with your yubikey serial number and store in your password manager.
-## 1.1 remove otp
-```sh
-ykman config usb -d otp
-```
+before setup prepare yourself a `user-pin` (6 digits) and `admin-pin` (8 digits), associate it with your yubikey serial number and store in your password manager.
 
-## 1.2 reset openpgp factory settings
-```sh
-ykman openpgp reset
-```
-
-## 1.3 create keys
+## create keys
 ```sh
 gpg --card-edit
 ```
@@ -72,40 +78,31 @@ commands in edit mode
     2. passwd
     3. key-attr 
         -> Signature-Key - RSA 4096
-        -> Encryption-Key - RSA 4096
-        -> Authentication-Key - RSA 4096 
     4. name 
-        -> Stein A Sivertsen
     5. url 
         -> https://github.com/steinsiv.gpg
     6. generate
-        -> Stein A Sivertsen
-        -> steinsiv@users.noreply.github.com
     7. quit
 ```
 
-### 1.4 store revocation cert in your favourite password manager and delete it from disk
+### store revocation cert in your favourite password manager and delete it from disk
 ```sh
 gpg: revocation certificate stored as '$HOME/.gnupg/openpgp-revocs.d/0DAE07577DC2E3B16C6185457B037DC8C6EDACE1.rev'
 public and secret key created and signed.
 ```
 
-### 1.5 set the touch policy to touch required for sign
-```sh
-ykman openpgp keys set-touch sig on
-```
+### export public key in armored mode and import to github under `settings/pgp`
 
-### 1.6 Export public key in armored mode and import to github under `settings/pgp`
+[https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key)
+
 ```sh
 gpg --list-keys
 gpg --armor --export <KEYID>
 ```
 
 [github.com/settings/gpg/new](https://github.com/settings/gpg/new)
-<img width="899" alt="image" src="https://user-images.githubusercontent.com/1442452/203655816-6d17eece-6198-402d-9f01-0e710456533b.png">
-</a>
 
-# 2. git config
+# GIT
 example configuration
 ```sh
 ❯ git config --global --list
@@ -119,7 +116,7 @@ gpg.program=$HOME/.local/bin/yubikeysign
 
 __**note** user.email and email on key must match for github to verify your commits!__
 
-## 2.1 clear git settings
+## clear old git settings
 ```sh
 git config --global --unset user.signingkey
 git config --global --unset commit.gpgsign 
@@ -127,7 +124,7 @@ git config --global --unset tag.forceSignAnnotated
 git config --global --unset gpg.program
 ```
 
-## 2.2 create gpgsign program 
+## create gpgsign program 
 ```sh
 $HOME/.local/bin/yubikeysign
 ```
@@ -143,7 +140,7 @@ echo "Sign completed"
 
 ```
 
-## 2.3 configure git
+## configure git
 
 ```sh
 git config --global user.signingkey 09442A8B08CB61E8C3754EA2AA288CD2B6F83618
@@ -152,31 +149,9 @@ git config --global tag.forceSignAnnotated true
 git config --global gpg.program "$HOME/.local/bin/yubikeysign"
 ```
 
-## 2.4 add a notification (optional)
-replace 
+## check gpg sign, (optional)
 ```sh
-/usr/local/bin/gpg "$@"
-```
-with
-
-```sh
-/usr/bin/osascript -e 'display notification "GIT wants a signed commit!" with title "Touch YubiKey 🙈"' && say sign please && /usr/local/bin/gpg "$@"
-```
-in gpgsign program: `$HOME/.local/bin/yubikeysign` to get the final program
-```sh
-#!/bin/bash
-
-/usr/bin/osascript -e 'display notification "GIT wants a signed commit!" with title "Touch YubiKey 🙈"' && say sign please && gpg "$@"
-
-if [[ "$?" -ne 0 ]]; then
-    echo "Signing failed, exiting"
-fi
-echo "Sign completed"
-```
-
-## Check gpg sign
-```sh
-❯ echo "I know it's hard to believe so I will sign this" > msg.txt
+❯ echo "Im" > msg.txt
 ❯ gpg -s -a msg.txt
 
 ❯ cat msg.txt.asc
@@ -201,10 +176,14 @@ LHGhbroV9utkN0S5MOvAfpVXdw==
 ```
 fetch public key from https://github.com/steinsiv.gpg and verify
 
-## Commit, Sign and Push a verified commit
+## commit, Sign and Push a verified commit
 
 <img width="1190" alt="image" src="https://user-images.githubusercontent.com/1442452/203724765-c44e051e-d2bc-44ee-8aa1-277230afc3ff.png">
 
 ## extras: automate with script
+see: `gpg_gitconfig.sh` in this repo, and [https://github.com/DataDog/yubikey](https://github.com/DataDog/yubikey) where the steps in this guide was extracted from.
 
-see: `gpg_gitconfig.sh`
+## other relevant links:
+[https://github.com/DataDog/yubikey](https://github.com/DataDog/yubikey)
+[https://docs.yubico.com/software/yubikey/tools/ykman/OpenPGP_Commands.html](https://docs.yubico.com/software/yubikey/tools/ykman/OpenPGP_Commands.html)
+[https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key)
