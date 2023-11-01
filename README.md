@@ -10,12 +10,15 @@ brew install git gpg pinentry-mac ykman
 ```
 
 ## Add pinentry program to gpg-agent config and restart agent
+__**Note**: If `gpg` hasn't been run, the `gpg-agent.conf` file will not exist. You will then need to run the command `gpg` once first__
 ```
 echo "pinentry-program $(which pinentry-mac)" >> $HOME/.gnupg/gpg-agent.conf
 gpg-connect-agent reloadagent /bye
 ```
 
 # YKMAN
+This section is to create a new key on your yubikey. If you already have a key on it, skip to [GIT Setup](#GIT).
+
 [https://docs.yubico.com/software/yubikey/tools/ykman/](https://docs.yubico.com/software/yubikey/tools/ykman/)
 
 Remove otp and reset openpg
@@ -103,7 +106,13 @@ gpg --armor --export <KEYID>
 [github.com/settings/gpg/new](https://github.com/settings/gpg/new)
 
 # GIT
-example configuration
+If you skipped the previous steps due to already having a key on your yubikey, remember to import it into `gpg`. If you also have imported it to github you can use the following:
+
+```sh
+curl https://github.com/<YOUR_GITHUB_USERNAME>.gpg | gpg --import -
+gpg --list-keys
+```
+With keys , you can setup github config. Example configuration:
 ```sh
 ❯ git config --global --list
 user.email=steinsiv@users.noreply.github.com
@@ -114,9 +123,9 @@ tag.forcesignannotated=true
 gpg.program=$HOME/.local/bin/yubikeysign
 ```
 
-__**note** user.email and email on key must match for github to verify your commits!__
+__**Note:** `user.email` and the email for the gpg-key must match for github to verify your commits!__
 
-## clear old git settings
+## optional, clear old git settings
 ```sh
 git config --global --unset user.signingkey
 git config --global --unset commit.gpgsign 
@@ -142,7 +151,10 @@ echo "Sign completed"
 
 ## configure git
 
+Exchange with your signinkey
+
 ```sh
+chmod +x "$HOME/.local/bin/yubikeysign"
 git config --global user.signingkey 09442A8B08CB61E8C3754EA2AA288CD2B6F83618
 git config --global commit.gpgsign true
 git config --global tag.forceSignAnnotated true
@@ -176,7 +188,7 @@ LDDDfK7r7Y2ev5gIWr5rB126pvbsIst4XdYq+lQblHiy+WKBL14=
 ```
 fetch public key from https://github.com/steinsiv.gpg and verify
 
-## commit, Sign and Push a verified commit
+## commit, sign and push a verified commit
 
 <img width="1190" alt="image" src="https://user-images.githubusercontent.com/1442452/203724765-c44e051e-d2bc-44ee-8aa1-277230afc3ff.png">
 
